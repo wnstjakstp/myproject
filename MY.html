@@ -102,6 +102,21 @@
     opacity:0.35;
     mask-image:radial-gradient(circle at 30% 35%, black 0%, black 20%, transparent 62%);
   }
+  .particle-field{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
+  .particle{
+    position:absolute;bottom:-16px;border-radius:50%;
+    background:var(--orange);opacity:0;
+    animation:particle-float linear infinite;
+  }
+  @keyframes particle-float{
+    0%{transform:translate(0,0);opacity:0;}
+    12%{opacity:0.55;}
+    88%{opacity:0.3;}
+    100%{transform:translate(var(--drift,20px),-640px);opacity:0;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .particle{display:none;}
+  }
   .hero-inner{position:relative;z-index:1;}
   .eyebrow{
     font-family:var(--font-mono);
@@ -122,6 +137,16 @@
     max-width:820px;
   }
   h1.headline .accent{color:var(--orange);}
+  h1.headline.typing-cursor::after{
+    content:"";
+    display:inline-block;
+    width:2px;height:0.9em;
+    margin-left:4px;
+    background:var(--orange);
+    vertical-align:-0.12em;
+    animation:blink 0.85s step-end infinite;
+  }
+  @keyframes blink{ 50%{opacity:0;} }
   .sub{
     font-size:clamp(15px,1.7vw,18px);
     color:var(--ink-dim);
@@ -351,6 +376,7 @@
     .reveal{opacity:1;transform:none;transition:none;}
     .scroll-cue .line{animation:none;}
     .card:hover{transform:none;}
+    h1.headline.typing-cursor::after{animation:none;}
   }
 </style>
 </head>
@@ -373,9 +399,10 @@
 
 <header class="hero">
   <div class="spray-field"></div>
+  <div class="particle-field" id="particleField"></div>
   <div class="wrap hero-inner">
     <div class="eyebrow">AIRBRUSH FOR BEGINNERS</div>
-    <h1 class="headline" data-i18n="heroHeadline">제대로 시작하는<br>에어브러시, <span class="accent">장비</span>와 <span class="accent">도료</span>부터</h1>
+    <h1 class="headline" id="heroHeadline" data-i18n="heroHeadline">제대로 시작하는<br>에어브러시, <span class="accent">장비</span>와 <span class="accent">도료</span>부터</h1>
     <p class="sub" data-i18n="heroSub">멋있어 보여서 시작했다가 장비값과 냄새에 놀라는 취미. 밑색부터 제대로 깔면 그 위의 도색은 훨씬 쉬워집니다.</p>
     <div class="hero-meta">
       <span class="pill" data-i18n="pill1">장비 4종</span>
@@ -628,6 +655,42 @@
 </script>
 
 <script>
+  function typeWriter(el, speed){
+    const clone = el.cloneNode(true);
+    const walker = document.createTreeWalker(clone, NodeFilter.SHOW_TEXT);
+    const textNodes = [];
+    let n;
+    while(n = walker.nextNode()) textNodes.push(n);
+    const fullTexts = textNodes.map(t => t.textContent);
+    textNodes.forEach(t => t.textContent = '');
+
+    el.innerHTML = '';
+    el.appendChild(clone);
+    el.classList.add('typing-cursor');
+
+    let ni = 0, ci = 0;
+    (function step(){
+      if(ni >= textNodes.length){ el.classList.remove('typing-cursor'); return; }
+      const target = fullTexts[ni];
+      if(ci < target.length){
+        textNodes[ni].textContent += target[ci];
+        ci++;
+        setTimeout(step, speed);
+      } else {
+        ni++; ci = 0;
+        setTimeout(step, speed);
+      }
+    })();
+  }
+
+  const headlineEl = document.getElementById('heroHeadline');
+  if(headlineEl){
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(!reduceMotion){ typeWriter(headlineEl, 42); }
+  }
+</script>
+
+<script>
   (function(){
     const saved = localStorage.getItem('basecoat-theme');
     if(saved === 'light'){ document.documentElement.setAttribute('data-theme','light'); }
@@ -643,6 +706,27 @@
       localStorage.setItem('basecoat-theme','light');
     }
   }
+</script>
+
+<script>
+  (function(){
+    const field = document.getElementById('particleField');
+    if(!field) return;
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const count = window.matchMedia('(max-width:640px)').matches ? 14 : 26;
+    for(let i = 0; i < count; i++){
+      const p = document.createElement('span');
+      p.className = 'particle';
+      const size = 2 + Math.random() * 4;
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      p.style.left = (Math.random() * 100) + '%';
+      p.style.setProperty('--drift', (Math.random() * 60 - 30) + 'px');
+      p.style.animationDuration = (9 + Math.random() * 10) + 's';
+      p.style.animationDelay = (Math.random() * 10) + 's';
+      field.appendChild(p);
+    }
+  })();
 </script>
 
 <script>
