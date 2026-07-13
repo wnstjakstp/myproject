@@ -378,9 +378,47 @@
     .card:hover{transform:none;}
     h1.headline.typing-cursor::after{animation:none;}
   }
+
+  /* ---------- scroll progress gauge ---------- */
+  .scroll-gauge{
+    position:fixed;right:22px;top:90px;z-index:60;
+    width:76px;height:76px;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--surface);border:2px solid var(--line);
+    border-radius:50%;
+    box-shadow:0 6px 20px rgba(0,0,0,0.35);
+    opacity:0;transform:scale(0.8);
+    transition:opacity .3s ease, transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+    pointer-events:none;
+  }
+  .scroll-gauge.visible{opacity:1;transform:scale(1);pointer-events:auto;}
+  .scroll-gauge.complete{
+    border-color:var(--orange);
+    box-shadow:0 6px 24px rgba(255,106,57,0.45);
+  }
+  .scroll-gauge svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);}
+  .scroll-gauge circle{fill:none;stroke-width:5;}
+  .scroll-gauge .gauge-track{stroke:var(--line);}
+  .scroll-gauge .gauge-fill{stroke:var(--orange);stroke-linecap:round;transition:stroke-dashoffset .1s linear;}
+  .scroll-gauge .gauge-label{
+    position:relative;font-family:var(--font-mono);font-size:14px;font-weight:600;color:var(--ink);
+  }
+  .scroll-gauge.complete .gauge-label{color:var(--orange);}
+  @media(max-width:640px){
+    .scroll-gauge{width:60px;height:60px;right:14px;top:78px;}
+    .scroll-gauge .gauge-label{font-size:12px;}
+  }
 </style>
 </head>
 <body>
+
+<div class="scroll-gauge" id="scrollGauge" aria-hidden="true">
+  <svg viewBox="0 0 58 58">
+    <circle class="gauge-track" cx="29" cy="29" r="25"/>
+    <circle class="gauge-fill" id="gaugeFill" cx="29" cy="29" r="25"/>
+  </svg>
+  <span class="gauge-label" id="gaugeLabel">0%</span>
+</div>
 
 <nav class="nav">
   <div class="brand">BASE<span>COAT</span></div>
@@ -726,6 +764,34 @@
       p.style.animationDelay = (Math.random() * 10) + 's';
       field.appendChild(p);
     }
+  })();
+</script>
+
+<script>
+  (function(){
+    const gauge = document.getElementById('scrollGauge');
+    const fill = document.getElementById('gaugeFill');
+    const label = document.getElementById('gaugeLabel');
+    const r = 25;
+    const circumference = 2 * Math.PI * r;
+    fill.style.strokeDasharray = circumference;
+    fill.style.strokeDashoffset = circumference;
+
+    function updateGauge(){
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const pct = docHeight > 0 ? Math.min(100, Math.max(0, (scrollTop / docHeight) * 100)) : 0;
+
+      fill.style.strokeDashoffset = circumference * (1 - pct / 100);
+      label.textContent = Math.round(pct) + '%';
+
+      gauge.classList.toggle('visible', scrollTop > 80);
+      gauge.classList.toggle('complete', pct >= 99.5);
+    }
+
+    window.addEventListener('scroll', updateGauge, {passive:true});
+    window.addEventListener('resize', updateGauge);
+    updateGauge();
   })();
 </script>
 
