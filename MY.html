@@ -335,6 +335,16 @@
   html[data-theme="light"] .theme-toggle .icon-moon{display:none;}
   html[data-theme="light"] .theme-toggle .icon-sun{display:block;}
   .nav-right{display:flex;align-items:center;gap:16px;}
+  .lang-toggle{
+    display:flex;border:1px solid var(--line);border-radius:100px;
+    overflow:hidden;background:var(--surface);
+  }
+  .lang-toggle button{
+    border:none;background:transparent;color:var(--ink-mute);
+    font-family:var(--font-mono);font-size:11.5px;letter-spacing:0.04em;
+    padding:8px 13px;transition:background .2s ease, color .2s ease;
+  }
+  .lang-toggle button.active{background:var(--orange);color:#1a1005;font-weight:600;}
 
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto;}
@@ -349,7 +359,11 @@
 <nav class="nav">
   <div class="brand">BASE<span>COAT</span></div>
   <div class="nav-right">
-    <div class="tag">에어브러시 입문 가이드</div>
+    <div class="tag" data-i18n="navTag">에어브러시 입문 가이드</div>
+    <div class="lang-toggle" role="group" aria-label="언어 선택">
+      <button type="button" class="active" data-lang="ko" onclick="setLang('ko')">KO</button>
+      <button type="button" data-lang="en" onclick="setLang('en')">EN</button>
+    </div>
     <button class="theme-toggle" id="themeToggle" aria-label="다크/라이트 모드 전환" onclick="toggleTheme()">
       <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 12.8A9 9 0 1 1 11.2 3a7.2 7.2 0 0 0 9.8 9.8Z"/></svg>
       <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4.2"/><path d="M12 3v2.2M12 18.8V21M4.9 4.9l1.5 1.5M17.6 17.6l1.5 1.5M3 12h2.2M18.8 12H21M4.9 19.1l1.5-1.5M17.6 6.4l1.5-1.5"/></svg>
@@ -361,12 +375,12 @@
   <div class="spray-field"></div>
   <div class="wrap hero-inner">
     <div class="eyebrow">AIRBRUSH FOR BEGINNERS</div>
-    <h1 class="headline">제대로 시작하는<br>에어브러시, <span class="accent">장비</span>와 <span class="accent">도료</span>부터</h1>
-    <p class="sub">멋있어 보여서 시작했다가 장비값과 냄새에 놀라는 취미. 밑색부터 제대로 깔면 그 위의 도색은 훨씬 쉬워집니다.</p>
+    <h1 class="headline" data-i18n="heroHeadline">제대로 시작하는<br>에어브러시, <span class="accent">장비</span>와 <span class="accent">도료</span>부터</h1>
+    <p class="sub" data-i18n="heroSub">멋있어 보여서 시작했다가 장비값과 냄새에 놀라는 취미. 밑색부터 제대로 깔면 그 위의 도색은 훨씬 쉬워집니다.</p>
     <div class="hero-meta">
-      <span class="pill">장비 4종</span>
-      <span class="pill">도료 3종 비교</span>
-      <span class="pill">관리·정비 영상</span>
+      <span class="pill" data-i18n="pill1">장비 4종</span>
+      <span class="pill" data-i18n="pill2">도료 3종 비교</span>
+      <span class="pill" data-i18n="pill3">관리·정비 영상</span>
     </div>
   </div>
   <div class="scroll-cue"><span class="line"></span>SCROLL</div>
@@ -375,7 +389,7 @@
 <section class="flow-section">
   <div class="wrap reveal">
     <div class="eyebrow" style="margin-bottom:0;">SETUP AT A GLANCE</div>
-    <h2 style="margin-top:14px;max-width:520px;">뿌리기까지, 이 네 가지가 이어집니다</h2>
+    <h2 style="margin-top:14px;max-width:520px;" data-i18n="flowTitle">뿌리기까지, 이 네 가지가 이어집니다</h2>
     <div class="flow-track">
       <div class="flow-line"></div>
       <div class="flow-row">
@@ -384,32 +398,32 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="8" width="12" height="10" rx="2"/><path d="M8 8V5a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v3"/><path d="M16 12h4"/></svg>
           </div>
           <span class="flow-num">01</span>
-          <span class="flow-label">컴프레서</span>
-          <span class="flow-sub">공기를 만든다</span>
+          <span class="flow-label" data-i18n="flowLabel1">컴프레서</span>
+          <span class="flow-sub" data-i18n="flowSub1">공기를 만든다</span>
         </div>
         <div class="flow-node">
           <div class="flow-circle">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 13h6l2-4h4a4 4 0 0 1 0 8h-2"/><circle cx="18" cy="13" r="1.2" fill="currentColor" stroke="none"/></svg>
           </div>
           <span class="flow-num">02</span>
-          <span class="flow-label">에어브러시</span>
-          <span class="flow-sub">도료를 뿌린다</span>
+          <span class="flow-label" data-i18n="flowLabel2">에어브러시</span>
+          <span class="flow-sub" data-i18n="flowSub2">도료를 뿌린다</span>
         </div>
         <div class="flow-node">
           <div class="flow-circle">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3c3 4 5 6.6 5 9.5A5 5 0 0 1 7 12.5C7 9.6 9 7 12 3Z"/></svg>
           </div>
           <span class="flow-num">03</span>
-          <span class="flow-label">도료</span>
-          <span class="flow-sub">락카·아크릴·에나멜</span>
+          <span class="flow-label" data-i18n="flowLabel3">도료</span>
+          <span class="flow-sub" data-i18n="flowSub3">락카·아크릴·에나멜</span>
         </div>
         <div class="flow-node">
           <div class="flow-circle">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="2.4"/><path d="M12 9.6c1.6-2.4 4-3 5.4-1.8s.6 3.8-1.8 5.4M12 14.4c1.6 2.4 1.2 4.6-.2 5.8s-4-.6-4.4-3.2M9.4 9.6C7.8 7.2 5.4 6.6 4 7.8s-.6 3.8 1.8 5.4"/></svg>
           </div>
           <span class="flow-num">04</span>
-          <span class="flow-label">부스·환기</span>
-          <span class="flow-sub">냄새를 빼낸다</span>
+          <span class="flow-label" data-i18n="flowLabel4">부스·환기</span>
+          <span class="flow-sub" data-i18n="flowSub4">냄새를 빼낸다</span>
         </div>
       </div>
     </div>
@@ -419,14 +433,14 @@
 <section class="intro">
   <div class="wrap intro-grid reveal">
     <div class="intro-body">
-      <div class="num-tag">00 — 이 취미는 어떤 취미인가요</div>
-      <h2 style="margin:10px 0 24px;">멋진 완성작 뒤엔,<br>생각보다 긴 준비 과정이 있습니다</h2>
-      <p>에어브러시는 붓도색보다 훨씬 매끈하고 균일한 도색을 만들어주는 도구지만, <strong>사서 바로 뿌릴 수 있는 취미는 아닙니다.</strong> 위 흐름도의 네 가지를 갖추고, 도료 특성까지 이해해야 첫 도색을 안전하게 시작할 수 있습니다.</p>
-      <p>화려한 결과물보다 먼저, <strong>안전하고 꾸준히 뿌릴 수 있는 기본기</strong>를 잡는 게 이 페이지의 목표입니다.</p>
+      <div class="num-tag" data-i18n="introNum">00 — 이 취미는 어떤 취미인가요</div>
+      <h2 style="margin:10px 0 24px;" data-i18n="introTitle">멋진 완성작 뒤엔,<br>생각보다 긴 준비 과정이 있습니다</h2>
+      <p data-i18n="introP1">에어브러시는 붓도색보다 훨씬 매끈하고 균일한 도색을 만들어주는 도구지만, <strong>사서 바로 뿌릴 수 있는 취미는 아닙니다.</strong> 위 흐름도의 네 가지를 갖추고, 도료 특성까지 이해해야 첫 도색을 안전하게 시작할 수 있습니다.</p>
+      <p data-i18n="introP2">화려한 결과물보다 먼저, <strong>안전하고 꾸준히 뿌릴 수 있는 기본기</strong>를 잡는 게 이 페이지의 목표입니다.</p>
     </div>
     <div class="honesty-card">
-      <h3>시작 전에 솔직히 말씀드리면</h3>
-      <p>초기 장비 비용이 들고, 환기 등 공간 제약이 있으며, 도료 공부도 필요합니다. 이 페이지를 다 읽고 나면 "그래도 해볼 만하다"는 판단이 서실 거예요.</p>
+      <h3 data-i18n="honestyTitle">시작 전에 솔직히 말씀드리면</h3>
+      <p data-i18n="honestyBody">초기 장비 비용이 들고, 환기 등 공간 제약이 있으며, 도료 공부도 필요합니다. 이 페이지를 다 읽고 나면 "그래도 해볼 만하다"는 판단이 서실 거예요.</p>
     </div>
   </div>
 </section>
@@ -434,9 +448,9 @@
 <section id="strengths">
   <div class="wrap">
     <div class="section-head reveal">
-      <div class="num-tag">01 — 알아야 할 것들</div>
-      <h2>장비, 도료, 그리고 관리</h2>
-      <p class="lede">입문자가 가장 먼저 궁금해하는 다섯 가지를 정리했습니다.</p>
+      <div class="num-tag" data-i18n="section01Num">01 — 알아야 할 것들</div>
+      <h2 data-i18n="section01Title">장비, 도료, 그리고 관리</h2>
+      <p class="lede" data-i18n="section01Lede">입문자가 가장 먼저 궁금해하는 다섯 가지를 정리했습니다.</p>
     </div>
 
     <div class="card-grid">
@@ -448,13 +462,13 @@
           <img class="card-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/PaascheAirbrush.jpg" alt="에어브러시" loading="lazy">
         </div>
         <span class="photo-credit">사진: <a href="https://commons.wikimedia.org/wiki/File:Air_Compressor.JPG" target="_blank" rel="noopener">Masugn</a>(CC BY-SA 4.0), <a href="https://commons.wikimedia.org/wiki/File:PaascheAirbrush.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>(CC BY-SA 2.5) — Wikimedia Commons</span>
-        <h3>환경 구축의 현실</h3>
-        <p>에어브러시 하나만 사면 끝나지 않습니다. 공기를 만드는 컴프레서, 분사 도구, 냄새를 빼내는 환기 시스템, 도료가 튀지 않게 잡아주는 도색부스까지 — 4가지가 한 세트입니다.</p>
+        <h3 data-i18n="card1Title">환경 구축의 현실</h3>
+        <p data-i18n="card1Body">에어브러시 하나만 사면 끝나지 않습니다. 공기를 만드는 컴프레서, 분사 도구, 냄새를 빼내는 환기 시스템, 도료가 튀지 않게 잡아주는 도색부스까지 — 4가지가 한 세트입니다.</p>
         <div class="tag-row">
-          <span class="tag">에어 컴프레서</span>
-          <span class="tag">에어브러시</span>
-          <span class="tag">환기 시스템</span>
-          <span class="tag">도색부스</span>
+          <span class="tag" data-i18n="card1Tag1">에어 컴프레서</span>
+          <span class="tag" data-i18n="card1Tag2">에어브러시</span>
+          <span class="tag" data-i18n="card1Tag3">환기 시스템</span>
+          <span class="tag" data-i18n="card1Tag4">도색부스</span>
         </div>
       </div>
 
@@ -462,23 +476,23 @@
         <span class="tape"></span>
         <img class="card-photo" style="width:100%;height:132px;margin-bottom:10px;" src="https://commons.wikimedia.org/wiki/Special:FilePath/Spray_Paint_Can.png" alt="도료 예시 이미지" loading="lazy">
         <span class="photo-credit">사진: <a href="https://commons.wikimedia.org/wiki/File:Spray_Paint_Can.png" target="_blank" rel="noopener">Wikimedia Commons</a>(CC BY-SA 3.0)</span>
-        <h3>도료 3종 비교</h3>
-        <p>같은 에어브러시라도 어떤 도료를 쓰느냐에 따라 냄새, 발색, 관리법이 완전히 달라집니다.</p>
+        <h3 data-i18n="card2Title">도료 3종 비교</h3>
+        <p data-i18n="card2Body">같은 에어브러시라도 어떤 도료를 쓰느냐에 따라 냄새, 발색, 관리법이 완전히 달라집니다.</p>
         <div class="paint">
-          <div class="paint-row"><span class="label">락카</span><div class="bar-track"><div class="bar-fill" style="width:88%"></div></div><span class="paint-note">발색·강도↑</span></div>
-          <div class="paint-row"><span class="label">아크릴</span><div class="bar-track"><div class="bar-fill" style="width:32%"></div></div><span class="paint-note">유독성↓ 최근 대세</span></div>
-          <div class="paint-row"><span class="label">에나멜</span><div class="bar-track"><div class="bar-fill" style="width:55%"></div></div><span class="paint-note">부분도색·웨더링</span></div>
+          <div class="paint-row"><span class="label" data-i18n="paintLabel1">락카</span><div class="bar-track"><div class="bar-fill" style="width:88%"></div></div><span class="paint-note" data-i18n="paintNote1">발색·강도↑</span></div>
+          <div class="paint-row"><span class="label" data-i18n="paintLabel2">아크릴</span><div class="bar-track"><div class="bar-fill" style="width:32%"></div></div><span class="paint-note" data-i18n="paintNote2">유독성↓ 최근 대세</span></div>
+          <div class="paint-row"><span class="label" data-i18n="paintLabel3">에나멜</span><div class="bar-track"><div class="bar-fill" style="width:55%"></div></div><span class="paint-note" data-i18n="paintNote3">부분도색·웨더링</span></div>
         </div>
       </div>
 
       <div class="card reveal">
         <span class="tape"></span>
         <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a13 13 0 0 1 0 18a13 13 0 0 1 0-18Z"/></svg>
-        <h3>국가별 규제 차이</h3>
-        <p>도료를 대하는 온도차는 나라마다 다릅니다. 이 배경을 알면 왜 요즘 아크릴로 넘어가는 추세인지 이해가 쉬워집니다.</p>
+        <h3 data-i18n="card3Title">국가별 규제 차이</h3>
+        <p data-i18n="card3Body">도료를 대하는 온도차는 나라마다 다릅니다. 이 배경을 알면 왜 요즘 아크릴로 넘어가는 추세인지 이해가 쉬워집니다.</p>
         <div class="reg-compare">
-          <div class="reg-col"><span class="place">동양권</span><p>락카 계열이 여전히 주류로 사용됩니다.</p></div>
-          <div class="reg-col"><span class="place">유럽권</span><p>락카는 일반인 판매 자체가 제한적입니다.</p></div>
+          <div class="reg-col"><span class="place" data-i18n="regPlace1">동양권</span><p data-i18n="regBody1">락카 계열이 여전히 주류로 사용됩니다.</p></div>
+          <div class="reg-col"><span class="place" data-i18n="regPlace2">유럽권</span><p data-i18n="regBody2">락카는 일반인 판매 자체가 제한적입니다.</p></div>
         </div>
       </div>
 
@@ -486,9 +500,9 @@
         <div>
           <span class="tape"></span>
           <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v4M12 17v4M5 12H3M21 12h-2M6.3 6.3 4.9 4.9M17.7 17.7l1.4 1.4M17.7 6.3l1.4-1.4M6.3 17.7 4.9 19.1"/><circle cx="12" cy="12" r="4"/></svg>
-          <h3>에어브러시 관리 · 정비</h3>
-          <p>가장 많은 입문자가 포기하는 지점입니다. 도료가 굳어 막히는 니들과 노즐, 제때 청소하지 않으면 분사가 망가집니다. 실제 정비 과정을 담은 영상으로 흐름을 먼저 눈에 익혀두세요.</p>
-          <div class="tag-row"><span class="tag">니들 세척</span><span class="tag">노즐 분해</span><span class="tag">희석·점도 관리</span></div>
+          <h3 data-i18n="maintTitle">에어브러시 관리 · 정비</h3>
+          <p data-i18n="maintBody">가장 많은 입문자가 포기하는 지점입니다. 도료가 굳어 막히는 니들과 노즐, 제때 청소하지 않으면 분사가 망가집니다. 실제 정비 과정을 담은 영상으로 흐름을 먼저 눈에 익혀두세요.</p>
+          <div class="tag-row"><span class="tag" data-i18n="maintTag1">니들 세척</span><span class="tag" data-i18n="maintTag2">노즐 분해</span><span class="tag" data-i18n="maintTag3">희석·점도 관리</span></div>
         </div>
         <div class="video-frame">
           <iframe src="https://www.youtube.com/embed/qRFukPVyVZA" title="에어브러시 관리 및 정비 영상" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -498,8 +512,8 @@
       <div class="card reveal">
         <span class="tape"></span>
         <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20V10l8-6 8 6v10"/><path d="M9 20v-6h6v6"/></svg>
-        <h3>실제로 구축해본 경험</h3>
-        <p>이론으로만 알고 끝낸 게 아니라, 직접 환기 시스템까지 갖춘 작업 공간을 구축하며 겪은 시행착오를 바탕으로 정리했습니다.</p>
+        <h3 data-i18n="card5Title">실제로 구축해본 경험</h3>
+        <p data-i18n="card5Body">이론으로만 알고 끝낸 게 아니라, 직접 환기 시스템까지 갖춘 작업 공간을 구축하며 겪은 시행착오를 바탕으로 정리했습니다.</p>
       </div>
 
     </div>
@@ -510,10 +524,10 @@
   <div class="wrap reveal">
     <div class="cta">
       <div>
-        <h2>그래도, 제대로 알고 시작하면<br>어렵지 않습니다</h2>
-        <p>장비 목록 확인하고 도료를 고른 다음, 정비 영상 한 번만 보고 시작해도 첫 도색의 실패 확률은 확 줄어듭니다.</p>
+        <h2 data-i18n="ctaTitle">그래도, 제대로 알고 시작하면<br>어렵지 않습니다</h2>
+        <p data-i18n="ctaBody">장비 목록 확인하고 도료를 고른 다음, 정비 영상 한 번만 보고 시작해도 첫 도색의 실패 확률은 확 줄어듭니다.</p>
       </div>
-      <a class="btn" href="#maintenance">
+      <a class="btn" href="#maintenance" data-i18n="ctaBtn">
         정비 영상 다시 보기 →
       </a>
     </div>
@@ -525,15 +539,93 @@
     <div class="footer-grid">
       <div class="footer-brand">BASECOAT</div>
       <div class="footer-links">
-        <span>에어브러시 입문 가이드</span>
-        <span>정보 제공 목적의 개인 취미 소개 페이지</span>
+        <span data-i18n="footerTagline">에어브러시 입문 가이드</span>
+        <span data-i18n="footerSub">정보 제공 목적의 개인 취미 소개 페이지</span>
       </div>
     </div>
-    <div class="footer-note">
+    <div class="footer-note" data-i18n="footerNote">
       본 페이지는 특정 브랜드·제품을 홍보하지 않으며, 입문자를 위한 일반 정보 정리를 목적으로 합니다. 정비 영상은 YouTube 공식 embed 기능을 통해 원본 출처에서 재생됩니다.
     </div>
   </div>
 </footer>
+
+<script>
+  const i18n = {
+    en: {
+      navTag: "Airbrush guide for beginners",
+      heroHeadline: 'Getting airbrushing right, starting with <span class="accent">gear</span> and <span class="accent">paint</span>',
+      heroSub: "A hobby that looks cool until you meet the price tag and the smell. Nail the base coat first, and everything after gets easier.",
+      pill1: "4 essential tools",
+      pill2: "3 paint types compared",
+      pill3: "Maintenance videos",
+      flowTitle: "Four pieces that connect before you spray",
+      flowLabel1: "Compressor", flowSub1: "Makes the air",
+      flowLabel2: "Airbrush", flowSub2: "Sprays the paint",
+      flowLabel3: "Paint", flowSub3: "Lacquer · Acrylic · Enamel",
+      flowLabel4: "Booth & ventilation", flowSub4: "Clears the fumes",
+      introNum: "00 — What kind of hobby is this",
+      introTitle: "Behind every clean finish<br>is a longer setup than you'd expect",
+      introP1: 'Airbrushing gives a much smoother, more even finish than brush painting, but <strong>it\'s not a hobby you can start the moment you buy one.</strong> You need all four pieces from the diagram above, plus a grasp of paint types, before your first safe spray session.',
+      introP2: 'Before chasing flashy results, this page is about building <strong>a safe, sustainable foundation</strong> first.',
+      honestyTitle: "Being upfront before you start",
+      honestyBody: "There's upfront gear cost, ventilation space requirements, and some paint chemistry to learn. By the end of this page you should be able to judge for yourself whether it's worth it.",
+      section01Num: "01 — What you need to know",
+      section01Title: "Gear, paint, and upkeep",
+      section01Lede: "The five things beginners ask about first.",
+      card1Title: "The reality of setting up",
+      card1Body: "Buying an airbrush alone won't get you started. A compressor to make air, the spray tool itself, ventilation to clear fumes, and a spray booth to contain overspray — these four come as a set.",
+      card1Tag1: "Air compressor", card1Tag2: "Airbrush", card1Tag3: "Ventilation", card1Tag4: "Spray booth",
+      card2Title: "Comparing three paint types",
+      card2Body: "Same airbrush, different paint — the smell, finish, and cleanup routine change completely depending on which one you use.",
+      paintLabel1: "Lacquer", paintNote1: "Vivid · strong",
+      paintLabel2: "Acrylic", paintNote2: "Low toxicity, recent trend",
+      paintLabel3: "Enamel", paintNote3: "Detailing · weathering",
+      card3Title: "Regional differences in regulation",
+      card3Body: "Attitudes toward paint differ by country. Understanding this makes it easier to see why acrylic has become the recent trend.",
+      regPlace1: "East Asia", regBody1: "Lacquer-based paints are still the mainstream choice.",
+      regPlace2: "Europe", regBody2: "Lacquer sales to the general public are heavily restricted.",
+      maintTitle: "Airbrush cleaning & maintenance",
+      maintBody: "This is where most beginners give up. Dried paint clogs the needle and nozzle, and skipping regular cleaning ruins your spray pattern. Watch the actual process below before you touch a wrench.",
+      maintTag1: "Needle cleaning", maintTag2: "Nozzle disassembly", maintTag3: "Thinning & viscosity",
+      card5Title: "Built from real experience",
+      card5Body: "This isn't just theory — it's written from actually setting up a ventilated workspace and learning through trial and error.",
+      ctaTitle: "Knowing the basics first<br>makes this far less intimidating",
+      ctaBody: "Check the gear list, pick your paint, watch the maintenance video once — and your odds of a failed first spray drop dramatically.",
+      ctaBtn: "Watch maintenance video again →",
+      footerTagline: "Airbrush beginner's guide",
+      footerSub: "A personal hobby page for informational purposes only",
+      footerNote: "This page does not promote any specific brand or product and is meant purely as general information for beginners. The maintenance video plays via YouTube's official embed feature from its original source."
+    }
+  };
+
+  const koStore = new Map();
+  document.querySelectorAll('[data-i18n]').forEach(el => koStore.set(el, el.innerHTML));
+
+  function applyLang(lang){
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if(lang === 'en' && i18n.en[key] !== undefined){
+        el.innerHTML = i18n.en[key];
+      } else {
+        el.innerHTML = koStore.get(el);
+      }
+    });
+    document.documentElement.lang = lang;
+    document.querySelectorAll('.lang-toggle button').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+    });
+  }
+
+  function setLang(lang){
+    applyLang(lang);
+    localStorage.setItem('basecoat-lang', lang);
+  }
+
+  (function(){
+    const savedLang = localStorage.getItem('basecoat-lang');
+    if(savedLang === 'en'){ applyLang('en'); }
+  })();
+</script>
 
 <script>
   (function(){
