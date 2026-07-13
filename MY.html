@@ -332,6 +332,36 @@
   }
   .btn:hover{transform:translateY(-2px);opacity:0.9;}
 
+  /* ---------- guestbook ---------- */
+  .guestbook{background:var(--bg-1);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .guest-form{
+    display:flex;flex-direction:column;gap:14px;
+    max-width:520px;margin-bottom:48px;
+  }
+  .guest-form input, .guest-form textarea{
+    background:var(--surface);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;color:var(--ink);font-family:var(--font-body);font-size:14.5px;
+    outline:none;transition:border-color .2s ease;
+  }
+  .guest-form input:focus, .guest-form textarea:focus{border-color:var(--orange);}
+  .guest-form textarea{min-height:88px;resize:vertical;}
+  .guest-submit{
+    align-self:flex-start;
+    font-family:var(--font-mono);font-size:13.5px;font-weight:600;
+    background:var(--orange);color:#1a1005;border:none;border-radius:100px;
+    padding:13px 26px;transition:transform .2s ease, opacity .2s ease;
+  }
+  .guest-submit:hover{transform:translateY(-2px);opacity:.92;}
+  .guest-list{display:flex;flex-direction:column;gap:14px;}
+  .guest-entry{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px 20px;
+  }
+  .guest-entry .guest-meta{display:flex;justify-content:space-between;gap:12px;margin-bottom:8px;font-family:var(--font-mono);font-size:11.5px;color:var(--ink-mute);}
+  .guest-entry .guest-name{color:var(--orange);font-weight:600;}
+  .guest-entry .guest-msg{color:var(--ink-dim);font-size:14.5px;line-height:1.6;white-space:pre-wrap;word-break:break-word;}
+  .guest-empty{color:var(--ink-mute);font-size:14px;}
+
   /* footer */
   footer{
     border-top:1px solid var(--line);
@@ -599,6 +629,24 @@
   </div>
 </section>
 
+<section class="guestbook" id="guestbook">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="num-tag" data-i18n="guestNum">02 — 다녀가셨다면</div>
+      <h2 data-i18n="guestTitle">한마디 남겨주세요</h2>
+      <p class="lede" data-i18n="guestLede">이름과 메시지를 남기면 이 브라우저에 저장되어 새로고침해도 남아있습니다.</p>
+    </div>
+
+    <form class="guest-form reveal" id="guestForm">
+      <input type="text" id="guestName" maxlength="20" placeholder="이름" data-i18n-ph="guestNamePh" required>
+      <textarea id="guestMsg" maxlength="140" placeholder="메시지를 남겨주세요 (최대 140자)" data-i18n-ph="guestMsgPh" required></textarea>
+      <button type="submit" class="guest-submit" data-i18n="guestSubmit">남기기</button>
+    </form>
+
+    <div class="guest-list reveal" id="guestList"></div>
+  </div>
+</section>
+
 <footer>
   <div class="wrap">
     <div class="footer-grid">
@@ -659,12 +707,22 @@
       ctaBtn: "Watch maintenance video again →",
       footerTagline: "Airbrush beginner's guide",
       footerSub: "A personal hobby page for informational purposes only",
-      footerNote: "This page does not promote any specific brand or product and is meant purely as general information for beginners. The maintenance video plays via YouTube's official embed feature from its original source."
+      footerNote: "This page does not promote any specific brand or product and is meant purely as general information for beginners. The maintenance video plays via YouTube's official embed feature from its original source.",
+      guestNum: "02 — Before you go",
+      guestTitle: "Leave a note",
+      guestLede: "Add your name and a message — it's saved in this browser, so it stays even after a refresh.",
+      guestNamePh: "Name",
+      guestMsgPh: "Leave a message (up to 140 characters)",
+      guestSubmit: "Post",
+      guestEmpty: "No messages yet. Be the first to say hello."
     }
   };
 
   const koStore = new Map();
   document.querySelectorAll('[data-i18n]').forEach(el => koStore.set(el, el.innerHTML));
+
+  const koPhStore = new Map();
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => koPhStore.set(el, el.placeholder));
 
   function applyLang(lang){
     document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -673,6 +731,14 @@
         el.innerHTML = i18n.en[key];
       } else {
         el.innerHTML = koStore.get(el);
+      }
+    });
+    document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+      const key = el.getAttribute('data-i18n-ph');
+      if(lang === 'en' && i18n.en[key] !== undefined){
+        el.placeholder = i18n.en[key];
+      } else {
+        el.placeholder = koPhStore.get(el);
       }
     });
     document.documentElement.lang = lang;
@@ -792,6 +858,71 @@
     window.addEventListener('scroll', updateGauge, {passive:true});
     window.addEventListener('resize', updateGauge);
     updateGauge();
+  })();
+</script>
+
+<script>
+  (function(){
+    const KEY = 'basecoat-guestbook';
+    const form = document.getElementById('guestForm');
+    const nameInput = document.getElementById('guestName');
+    const msgInput = document.getElementById('guestMsg');
+    const list = document.getElementById('guestList');
+    if(!form) return;
+
+    function escapeHtml(str){
+      return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+    function currentLang(){
+      return document.documentElement.lang === 'en' ? 'en' : 'ko';
+    }
+    function load(){
+      try{ return JSON.parse(localStorage.getItem(KEY)) || []; }
+      catch(e){ return []; }
+    }
+    function save(entries){ localStorage.setItem(KEY, JSON.stringify(entries)); }
+
+    function render(){
+      const entries = load();
+      if(entries.length === 0){
+        const emptyText = currentLang() === 'en' ? i18n.en.guestEmpty : '아직 남겨진 메시지가 없습니다. 첫 번째 방문자가 되어보세요.';
+        list.innerHTML = `<p class="guest-empty">${emptyText}</p>`;
+        return;
+      }
+      list.innerHTML = entries.slice().reverse().map(e => `
+        <div class="guest-entry">
+          <div class="guest-meta"><span class="guest-name">${escapeHtml(e.name)}</span><span>${e.date}</span></div>
+          <div class="guest-msg">${escapeHtml(e.msg)}</div>
+        </div>
+      `).join('');
+    }
+
+    form.addEventListener('submit', function(ev){
+      ev.preventDefault();
+      const name = nameInput.value.trim();
+      const msg = msgInput.value.trim();
+      if(!name || !msg) return;
+      const entries = load();
+      entries.push({
+        name: name,
+        msg: msg,
+        date: new Date().toLocaleDateString('ko-KR', {month:'2-digit', day:'2-digit'})
+      });
+      save(entries);
+      nameInput.value = '';
+      msgInput.value = '';
+      render();
+    });
+
+    if(typeof setLang === 'function'){
+      const baseSetLang = setLang;
+      setLang = function(lang){
+        baseSetLang(lang);
+        render();
+      };
+    }
+
+    render();
   })();
 </script>
 
